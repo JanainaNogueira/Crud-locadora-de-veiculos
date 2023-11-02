@@ -1,17 +1,17 @@
-import * as dotenv from 'dotenv'
-import Sequelize from 'sequelize'
-import express from 'express'
+/*import * as dotenv from 'dotenv'
+import {Sequelize} from 'sequelize'
+
 //acessar atributos
 
 dotenv.config();
 const connection = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASS,
+  "testing",
+  "root",
+  "54Fb#64@",
     {
-        dialect:process.env.DB_DIALECT,
-        host:process.env.DB_HOST,
-        port:process.env.DB_PORT
+        dialect:'mysql',
+        host:"localhost",
+        port:3307
     }
 )
 try {
@@ -21,4 +21,4 @@ try {
     console.error('Unable to connect to the database:', error);
   }
 
-  
+  */
