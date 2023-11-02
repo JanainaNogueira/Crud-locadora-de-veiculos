@@ -1,5 +1,5 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "node ./node_modules/nodemon/bin/nodemon.js src/server.js "
   },
