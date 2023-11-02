@@ -1,9 +1,10 @@
-import Sequelize from 'sequelize'
-import configDB from '../../config/config.json'
-import User from '../../models/Car'
+const Sequelize = require('sequelize')
+const configDB = require('../../config/config.js')
+const Veiculos = require('../../models/veiculos.js')
 
 const connection = new Sequelize(configDB)
 //Conecta a nova tabela ao bd
-User.init(connection)
+Veiculos.init(connection)
 
-export default connection
+module.exports = connection
+

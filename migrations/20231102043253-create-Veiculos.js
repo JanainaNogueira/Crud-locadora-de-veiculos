@@ -1,11 +1,10 @@
 'use strict';
 module.exports={
 up: (queryInterface, Sequelize)=> {
-    return queryInterface.createTable('Veiculos',{
+    return queryInterface.createTable('veiculos',{
        id:{
-        type:Sequelize.INTEGER,
+        type:Sequelize.UUID,
         primaryKey:true,
-        autoIncrement:true,
         allowNull:false
         },
         locadora:{
@@ -40,11 +39,11 @@ up: (queryInterface, Sequelize)=> {
           type:Sequelize.BOOLEAN,
           allowNull:false
         },
-        updatedAt:{
+        updated_at:{
           type:Sequelize.DATE,
           allowNull:false
         },
-        createdAt:{
+        created_at:{
           type:Sequelize.DATE,
           allowNull:false
         }
