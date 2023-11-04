@@ -1,0 +1,11 @@
+.sectionList{
+    margin-top:1%;
+    width: 95%;
+    background-color: yellowgreen;
+}
+.listHeader{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom:1%;
+}
