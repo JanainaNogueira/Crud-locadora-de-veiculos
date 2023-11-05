@@ -7,7 +7,7 @@ module.exports={
             const veiculos = await Veiculos.create({id,locadora,modelo,marca,ano,motor,portas ,cambio,ar_condicionado})
             res.status(200).json({veiculos})
         }catch(error){
-            res.status(401).json({error})
+            res.status(401).json({error , message:'não foi possivel criar o veiculo'})
         }
         
    },
@@ -16,7 +16,7 @@ module.exports={
         const cars = await Veiculos.findAll()
         res.status(200).json(cars)
     }catch(error){
-        res.status(401).json({error})
+        res.status(401).json({error, message:'não foi possivel atualizar a lista'})
     }
    },
    async getVeiculo(req,res){
@@ -30,7 +30,7 @@ module.exports={
             res.status(200).json({cars})
         }
     }catch(error){
-        res.status(401).json({error})
+        res.status(401).json({error, message:'não foi possivel procurar o veiculo'})
     }
    },
    async updateField(req,res){
@@ -46,7 +46,7 @@ module.exports={
             res.status(200).json({cars})
         }  
     }catch(error){
-        res.status(401).json({error})
+        res.status(401).json({error, message:'não foi possível atualizar'})
     }
     
 },
@@ -62,7 +62,7 @@ module.exports={
         }
         
     }catch(error){
-        res.status(401).json({error})
+        res.status(401).json({error, message:'não foi possivel excluir o carro '})
     }
    }
 }
