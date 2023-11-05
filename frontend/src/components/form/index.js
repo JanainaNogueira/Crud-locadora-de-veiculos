@@ -4,6 +4,7 @@ import Style from './index.module.css'
 import Button from "../button"
 
 const Form = ({idCar,onEvent})=>{
+    const [event,setEvent]=useState(onEvent)
     const [inputVeiculo,setInputVeiculo]=useState({
         id:uuidv4(),
         locadora:'',
@@ -36,9 +37,13 @@ const Form = ({idCar,onEvent})=>{
             headers:{
                 "Content-Type":"application/json"
             },
+            credentials: 'include',
             body:JSON.stringify(veiculoData)
         })
         .then((response) => response.json())
+        .then(responseData=>{
+           
+        })
         .catch((error)=>{
             console.log(error,' Erro ao enviar os dados')
         })
@@ -46,7 +51,8 @@ const Form = ({idCar,onEvent})=>{
     }
     const form = document.getElementsByTagName('input')
     function updatedValues(){
-        const veiculoData = {...inputVeiculo,id:uuidv4(),ano:anoInt,portas:portasInt}
+        
+        const veiculoData = {...inputVeiculo,id:idCar,ano:anoInt,portas:portasInt}
         fetch(`http://localhost:3030/veiculos/${idCar}`,{
             method:'PUT',
             headers:{
@@ -58,6 +64,16 @@ const Form = ({idCar,onEvent})=>{
             if(!response.ok){
                 throw new Error('Falha ao enviar o update')
             }
+            setEvent(!event)
+            setInputVeiculo({id:uuidv4(),
+                locadora:'',
+                modelo:'',
+                marca:'',
+                ano:'',
+                motor:'',
+                portas:'',
+                cambio:'',
+                ar_condicionado:false})
             return response.json()
         })
         .then(data=>{
@@ -70,6 +86,7 @@ const Form = ({idCar,onEvent})=>{
     useEffect(()=>{
         if(onEvent){
             if(onEvent!=='' && onEvent!==false){
+                setEvent(onEvent)
                 fetch(`http://localhost:3030/veiculos/${idCar}`,{
                     method:'GET',
                     headers:{
@@ -84,14 +101,19 @@ const Form = ({idCar,onEvent})=>{
                 })
                 .then(data=>{
                     let info =Object.entries(data.cars)
-                    for(let i=0;i<form.length;i++){
+                    for(let i=0;i<info.length ;i++){
                         let formElement = form[i]
                         if(info.some(([key,value])=>key ===formElement.name)){
                             let [key, value] = info.find(([key, value]) => key === formElement.name);
                             formElement.value=value
+                            setInputVeiculo(prev=>({
+                                ...prev,
+                                [formElement.name]:value
+                            }))
                         }
                     }
-                    updatedValues()
+                    
+                    
                 })
                 .catch(error=>{
                     console.log(error)
@@ -176,7 +198,7 @@ const Form = ({idCar,onEvent})=>{
                 value={inputVeiculo.ar_condicionado}
                 onChange={handleChangeValues}/>
             </label>
-            <Button onClick={onEvent?updatedValues:handleSubmit} text={onEvent?'Editar':'Adicionar'}/>
+            <Button onClick={event?updatedValues:handleSubmit} text={event?'Editar':'Adicionar'}/>
         </form>
     )
 }
