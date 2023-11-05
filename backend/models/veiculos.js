@@ -43,7 +43,15 @@ class Veiculos extends Model{
         },{
             sequelize
         })
-    }
+        sequelize.sync({ force: true })
+      .then(() => {
+        console.log("Tabela Veiculos foi criada (ou recriada) com sucesso.");
+      })
+      .catch((error) => {
+        console.error("Erro ao sincronizar a tabela Veiculos:", error);
+      });
+    };
 }
+
 
 module.exports = Veiculos

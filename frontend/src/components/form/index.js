@@ -36,26 +36,23 @@ const Form = ({idCar,onEvent})=>{
             headers:{
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify(inputVeiculo)
+            body:JSON.stringify(veiculoData)
         })
         .then((response) => response.json())
-        .then(responseData=>{
-            console.log(responseData)
-        })
         .catch((error)=>{
             console.log(error,' Erro ao enviar os dados')
         })
-        console.log({...inputVeiculo,id:uuidv4(),ano:anoInt,portas:portasInt})
 
     }
     const form = document.getElementsByTagName('input')
     function updatedValues(){
-        fetch(`http//localhost:3030/localhost/${idCar}`,{
+        const veiculoData = {...inputVeiculo,id:uuidv4(),ano:anoInt,portas:portasInt}
+        fetch(`http://localhost:3030/veiculos/${idCar}`,{
             method:'PUT',
             headers:{
                 'Content-Type':'aplication/json'
             },
-            body: JSON.stringify(inputVeiculo)
+            body: JSON.stringify(veiculoData)
         })
         .then(response=>{
             if(!response.ok){

@@ -1,26 +1,25 @@
 const express =require('express')
 const cors=require('cors')
-const {Router} = require('express')
+const router = express.Router()
 const VeiculoController =require('../controller/VeiculoController.js')
 
-const routes = Router();
-routes.post('/veiculos', VeiculoController.createVeiculo)
-routes.get('/veiculos', VeiculoController.updateList)
-routes.get('/veiculos/:id', VeiculoController.getVeiculo)
-routes.put('/veiculos/:id', VeiculoController.updateField)
-routes.delete('/veiculos/:id',VeiculoController.deleteVeiculo)
+router.post('/veiculos', VeiculoController.createVeiculo)
+router.get('/veiculos', VeiculoController.updateList)
+router.get('/veiculos/:id', VeiculoController.getVeiculo)
+router.put('/veiculos/:id', VeiculoController.updateField)
+router.delete('/veiculos/:id',VeiculoController.deleteVeiculo)
 
 
 const app =express()
 app.use(cors({
   origin: 'http://localhost:3000',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-  credentials: true
+  credentials: true,
 }));
-
-app.use('/',routes)
-app.listen(3030,()=>{
-    console.log('exemplo')
+app.use(express.json())
+app.use('/',router)
+app.listen(3030,(req,res)=>{
 })
 
-module.exports = routes
+module.exports = router
+module.exports=app
