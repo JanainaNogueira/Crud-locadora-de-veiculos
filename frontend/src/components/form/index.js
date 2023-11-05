@@ -1,9 +1,9 @@
-import { useState } from "react"
+import {useEffect, useState } from "react"
 import {v4 as uuidv4} from 'uuid'
 import Style from './index.module.css'
 import Button from "../button"
 
-const Form = ()=>{
+const Form = ({idCar,onEvent})=>{
     const [inputVeiculo,setInputVeiculo]=useState({
         id:uuidv4(),
         locadora:'',
@@ -17,14 +17,13 @@ const Form = ()=>{
     })
     const anoInt = parseInt(inputVeiculo.ano,10)
     const portasInt = parseInt(inputVeiculo.portas,10)
-
     function handleChangeValues(e){
         setInputVeiculo(prevValue=>({
             ...prevValue,
             [e.target.name]:e.target.value
         }))
     }
-    function HandleSubmit(e){
+    function handleSubmit(e){
         e.preventDefault();
         if (isNaN(anoInt) || isNaN(portasInt)) {
             console.error('Ano e número de portas devem ser números inteiros válidos.');
@@ -49,8 +48,65 @@ const Form = ()=>{
         console.log({...inputVeiculo,id:uuidv4(),ano:anoInt,portas:portasInt})
 
     }
+    const form = document.getElementsByTagName('input')
+    function updatedValues(){
+        fetch(`http//localhost:3030/localhost/${idCar}`,{
+            method:'PUT',
+            headers:{
+                'Content-Type':'aplication/json'
+            },
+            body: JSON.stringify(inputVeiculo)
+        })
+        .then(response=>{
+            if(!response.ok){
+                throw new Error('Falha ao enviar o update')
+            }
+            return response.json()
+        })
+        .then(data=>{
+            console.log('atualizados ',data)
+        })
+        .catch(error=>{
+            console.log('erro durante a atualização',error)
+        })
+    }
+    useEffect(()=>{
+        if(onEvent){
+            if(onEvent!=='' && onEvent!==false){
+                fetch(`http://localhost:3030/veiculos/${idCar}`,{
+                    method:'GET',
+                    headers:{
+                        "Content-Type":"application/json"
+                    }
+                })
+                .then(response=>{
+                    if(!response.ok){
+                        throw new Error('Erro ao editar o veiculo')
+                    }
+                    return response.json()
+                })
+                .then(data=>{
+                    let info =Object.entries(data.cars)
+                    for(let i=0;i<form.length;i++){
+                        let formElement = form[i]
+                        if(info.some(([key,value])=>key ===formElement.name)){
+                            let [key, value] = info.find(([key, value]) => key === formElement.name);
+                            formElement.value=value
+                        }
+                    }
+                    updatedValues()
+                })
+                .catch(error=>{
+                    console.log(error)
+                })
+                
+                
+            }
+        }
+       
+    },[onEvent,idCar])
     return(
-        <form onSubmit={HandleSubmit} className={Style.form}>
+        <form onSubmit={handleSubmit} className={Style.form} id="form">
             <label className={Style.box_input}>
                 <p>Locadora:</p>
                 <input 
@@ -123,7 +179,7 @@ const Form = ()=>{
                 value={inputVeiculo.ar_condicionado}
                 onChange={handleChangeValues}/>
             </label>
-            <Button onClick={HandleSubmit} text={'Adicionar'}/>
+            <Button onClick={onEvent?updatedValues:handleSubmit} text={onEvent?'Editar':'Adicionar'}/>
         </form>
     )
 }
