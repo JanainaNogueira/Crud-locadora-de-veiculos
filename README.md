@@ -28,8 +28,8 @@ O projeto consiste em um aplicativo CRUD (Create, Read, Update, Delete) desenvol
 2. Atualizar a lista de carros;
 3. Deletar um veiculo criado anteriormente
 4. Atualizar o campo de um veiculo 
-    1. Para está função atualmente existe o erro da aplicação estar criando um veiculo novo ao invés de apenas atualizar o existente.
-    2. Caso queira ver a rota funcionando, basta testas ela em um editor de API como o Insomia na respectiva rota 
+    1. Para está função atualmente existe o erro onde o botão de editar de  um mesmo elemento só pode ser clicado novamente
+     depois de clicar no botão de editar de outro elemento 
 
 # Como rodar a aplicação
 

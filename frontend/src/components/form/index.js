@@ -42,26 +42,41 @@ const Form = ({idCar,onEvent})=>{
             credentials: 'include',
             body:JSON.stringify(veiculoData)
         })
-        .then((response) => response.json()
+        .then((response) => 
+        response.json(),
+        setInputVeiculo({
+                id:uuidv4(),
+                locadora:'',
+                modelo:'',
+                marca:'',
+                ano:'',
+                motor:'',
+                portas:'',
+                cambio:'',
+                ar_condicionado:false})
         )
     }
 
     const form = document.getElementsByTagName('input')
     //Atualiza os campos que foram alterado no formulario
-    function updatedValues(){
+    function updatedValues(e){
+        e.preventDefault()
+        
         const veiculoData = {...inputVeiculo,id:idCar,ano:anoInt,portas:portasInt}
+        
         fetch(`http://localhost:3030/veiculos/${idCar}`,{
             method:'PUT',
             headers:{
-                'Content-Type':'aplication/json'
+                'Content-Type':'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(veiculoData)
         })
+        
         .then(response=>{
             if(!response.ok){
                 throw new Error('Falha ao enviar o update')
             }
-            setEvent(!event)
             setInputVeiculo({
                 id:uuidv4(),
                 locadora:'',
@@ -72,8 +87,15 @@ const Form = ({idCar,onEvent})=>{
                 portas:'',
                 cambio:'',
                 ar_condicionado:false})
+                setEvent(!event)
             return response.json()
         })
+        .then(data => {
+            console.log('Resposta do servidor:', data); // Adicione este log para ver a resposta do servidor
+        })
+        .catch(error => {
+            console.error('Erro durante a atualização', error);
+        });
     }
     useEffect(()=>{
         //Busca o veiculo que foi selecionado para edição
@@ -93,22 +115,26 @@ const Form = ({idCar,onEvent})=>{
                     return response.json()
                 })
                 .then(data=>{
-                    let info =Object.entries(data.cars)
-                    for(let i=0;i<info.length ;i++){
-                        let formElement = form[i]
-                        /*Compara se as chaves vinda do banco são iguais  as chaves dos inputs
-                        * e altera os valores das chaves iguais                        
-                        */
-                        if(info.some(([key,value])=>key ===formElement.name)){
-                            let [key, value] = info.find(([key, value]) => key === formElement.name);
-                            formElement.value=value
-                            setInputVeiculo(prev=>({
-                                ...prev,
-                                [formElement.name]:value
-                            }))
+                    if (data.cars && typeof data.cars === 'object') {
+                        let info =Object.entries(data.cars)
+                    
+                        for(let i=0;i<info.length ;i++){
+                            let formElement = form[i]
+                            /*Compara se as chaves vinda do banco são iguais  as chaves dos inputs
+                            * e altera os valores das chaves iguais                        
+                            */
+                            if(formElement && formElement.name){
+                                if(info.some(([key,value])=>key ===formElement.name)){
+                                    let [key, value] = info.find(([key, value]) => key === formElement.name);
+                                    formElement.value=value
+                                    setInputVeiculo(prev=>({
+                                        ...prev,
+                                        [formElement.name]:value
+                                    }))
+                                }
+                            }
                         }
                     }
-                    
                     
                 })
             }

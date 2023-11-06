@@ -39,13 +39,12 @@ module.exports={
     try{
       const {id} = req.params
         const {locadora,modelo,marca,ano,motor,portas ,cambio,ar_condicionado}=req.body
-    
+        console.log('banana',req.parser)
         const cars=await Veiculos.findOne({where:{id}})
         if(!cars){
             res.status(404).json({message:"Veiculo não encontrado"})
         }else{
-            const carsUpdate= await Veiculos.update({locadora,modelo,marca,ano,motor,portas ,cambio,ar_condicionado},{where:{id}})
-            res.status(200).json({message:"Veiculo atualizado"})
+            const carsUpdate= await cars.update({locadora,modelo,marca,ano,motor,portas ,cambio,ar_condicionado},{where:{id}})
         }  
     }catch(error){
         res.status(500).json({error, message:'não foi possível atualizar'})
