@@ -18,12 +18,14 @@ const Form = ({idCar,onEvent})=>{
     })
     const anoInt = parseInt(inputVeiculo.ano,10)
     const portasInt = parseInt(inputVeiculo.portas,10)
+    //Atualiza os dados do inputVeiculo conforme tem atualização nos campos
     function handleChangeValues(e){
         setInputVeiculo(prevValue=>({
             ...prevValue,
             [e.target.name]:e.target.value
         }))
     }
+    //Envia os dados para criação do veiculo
     function handleSubmit(e){
         e.preventDefault();
         if (isNaN(anoInt) || isNaN(portasInt)) {
@@ -40,18 +42,13 @@ const Form = ({idCar,onEvent})=>{
             credentials: 'include',
             body:JSON.stringify(veiculoData)
         })
-        .then((response) => response.json())
-        .then(responseData=>{
-           
-        })
-        .catch((error)=>{
-            console.log(error,' Erro ao enviar os dados')
-        })
-
+        .then((response) => response.json()
+        )
     }
+
     const form = document.getElementsByTagName('input')
+    //Atualiza os campos que foram alterado no formulario
     function updatedValues(){
-        
         const veiculoData = {...inputVeiculo,id:idCar,ano:anoInt,portas:portasInt}
         fetch(`http://localhost:3030/veiculos/${idCar}`,{
             method:'PUT',
@@ -65,7 +62,8 @@ const Form = ({idCar,onEvent})=>{
                 throw new Error('Falha ao enviar o update')
             }
             setEvent(!event)
-            setInputVeiculo({id:uuidv4(),
+            setInputVeiculo({
+                id:uuidv4(),
                 locadora:'',
                 modelo:'',
                 marca:'',
@@ -76,14 +74,9 @@ const Form = ({idCar,onEvent})=>{
                 ar_condicionado:false})
             return response.json()
         })
-        .then(data=>{
-            console.log('atualizados ',data)
-        })
-        .catch(error=>{
-            console.log('erro durante a atualização',error)
-        })
     }
     useEffect(()=>{
+        //Busca o veiculo que foi selecionado para edição
         if(onEvent){
             if(onEvent!=='' && onEvent!==false){
                 setEvent(onEvent)
@@ -103,6 +96,9 @@ const Form = ({idCar,onEvent})=>{
                     let info =Object.entries(data.cars)
                     for(let i=0;i<info.length ;i++){
                         let formElement = form[i]
+                        /*Compara se as chaves vinda do banco são iguais  as chaves dos inputs
+                        * e altera os valores das chaves iguais                        
+                        */
                         if(info.some(([key,value])=>key ===formElement.name)){
                             let [key, value] = info.find(([key, value]) => key === formElement.name);
                             formElement.value=value
@@ -115,17 +111,12 @@ const Form = ({idCar,onEvent})=>{
                     
                     
                 })
-                .catch(error=>{
-                    console.log(error)
-                })
-                
-                
             }
         }
        
     },[onEvent,idCar])
     return(
-        <form onSubmit={handleSubmit} className={Style.form} id="form">
+        <form className={Style.form} id="form">
             <label className={Style.box_input}>
                 <p>Locadora:</p>
                 <input 

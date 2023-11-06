@@ -9,10 +9,9 @@ module.exports={
             
         }catch(error){
             res.status(401).json({error , message:'não foi possivel criar o veiculo'})
-        }
-        
+        }  
    },
-   async updateList(req,res){
+    async updateList(req,res){
     try{
         const cars = await Veiculos.findAll()
         res.status(200).json(cars)

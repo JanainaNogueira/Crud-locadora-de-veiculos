@@ -32,6 +32,7 @@ const ListCar=({idCar,onEvent})=>{
                 let div = createNode('div')
                 let excludeButton = createNode('button')
                 let editButton = createNode('button')
+                //Cria um elemento p para cada atributo dos elementos existente no banco
                 for(let i=1;i<=(Object.values(car).length-3);i++){
                     let p = createNode('p')
                     p.textContent=Object.values(car)[i];
@@ -63,6 +64,7 @@ const ListCar=({idCar,onEvent})=>{
             console.error(error);
         });
     }
+
     function excludeItem(id, e){
         fetch(`http://localhost:3030/veiculos/${id}`, {
             method: 'DELETE',
@@ -77,6 +79,7 @@ const ListCar=({idCar,onEvent})=>{
             e.closest('li').remove()
         })
     }
+    
     useEffect(()=>{
         idCar(idEdit)
     },[idEdit])

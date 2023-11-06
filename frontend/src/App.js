@@ -7,6 +7,7 @@ import ListCar from './components/ListCar';
 function App() {
   const [data,setdata]=useState("")
   const [event,setEvent]=useState(false)
+  //Alteram os valores dos estados com os vindo s de listcar, para passar para form
   function childToParent(childdata){
     return setdata(childdata)
   }
